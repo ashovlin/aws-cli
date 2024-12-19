@@ -39,8 +39,8 @@ Output::
             "meshName":"app2",
             "metadata":{
                 "arn":"arn:aws:appmesh:us-east-1:123456789012:mesh/app2",
-                "createdAt":1563822121.877,
-                "lastUpdatedAt":1563822121.877,
+                "createdAt":1563822121.879,
+                "lastUpdatedAt":1563822121.879,
                 "uid":"a1b2c3d4-5678-90ab-cdef-11111EXAMPLE",
                 "version":1
             },
