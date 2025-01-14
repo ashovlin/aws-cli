@@ -1,5 +1,5 @@
 {
-  "type": "enhancement",
+  "type": "feature",
   "category": "dependency",
   "description": "Upgrade pyinstaller from 5.13.2 to 6.11.1."
 }
