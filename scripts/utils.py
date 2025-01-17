@@ -104,3 +104,20 @@ def save_to_zip(dirname, zipfile_name):
     if zipfile_name.endswith('.zip'):
         zipfile_name = zipfile_name[:-4]
     shutil.make_archive(zipfile_name, 'zip', dirname)
+
+
+def zip_preserve_symlinks(source_path, zip_path):
+    print(fr'Zipping {source_path} to {zip_path}')
+    os.makedirs(os.path.dirname(zip_path), exist_ok=True)
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for root, dirs, files in os.walk(source_path):
+            for file in files:
+                full_path = os.path.join(root, file)
+                rel_path = os.path.relpath(full_path, source_path)
+                if os.path.islink(full_path):
+                    # Store symlink information
+                    zinfo = zipfile.ZipInfo.from_file(full_path, rel_path)
+                    zinfo.external_attr = 0xA1ED0000  # symlink attribute
+                    zf.writestr(zinfo, os.readlink(full_path))
+                else:
+                    zf.write(full_path, rel_path)
