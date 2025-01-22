@@ -37,12 +37,23 @@ def run(cmd, cwd=None, env=None, echo=True):
 
 
 def extract_zip(zipfile_name, target_dir):
-    with zipfile.ZipFile(zipfile_name, 'r') as zf:
-        for zf_info in zf.infolist():
-            # Works around extractall not preserving file permissions:
-            # https://bugs.python.org/issue15795
-            extracted_path = zf.extract(zf_info, target_dir)
-            os.chmod(extracted_path, zf_info.external_attr >> 16)
+        with zipfile.ZipFile(zipfile_name, 'r') as zf:
+            for zf_info in zf.infolist():
+                # Check if it's a symlink
+                is_symlink = (zf_info.external_attr & 0xF0000000) == 0xA0000000
+
+                if is_symlink:
+                    # Read the symlink target
+                    target_path = zf.read(zf_info.filename).decode()
+                    # Construct the full path for the symlink
+                    symlink_path = os.path.join(target_dir, zf_info.filename)
+                    # Create the parent directory if it doesn't exist
+                    os.makedirs(os.path.dirname(symlink_path), exist_ok=True)
+                    os.symlink(target_path, symlink_path)
+                else:
+                    # Handle regular files as before
+                    extracted_path = zf.extract(zf_info, target_dir)
+                    os.chmod(extracted_path, zf_info.external_attr >> 16)
 
 
 @contextlib.contextmanager
