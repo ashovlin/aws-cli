@@ -5,14 +5,15 @@ This exe can then be wrapped in a platform specific installer for each
 supported platform.
 """
 import argparse
+import json
 import os
 import sys
 import shutil
-
+from distutils.dir_util import copy_tree
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from utils import run, tmp_dir, update_metadata, remove_dist_info, zip_preserve_symlinks
+from utils import run, tmp_dir, update_metadata, save_to_zip, remove_dist_info
 from install_deps import install_packages
 
 
@@ -50,8 +51,7 @@ def do_make_exe(workdir, exe_zipfile, ac_index):
     copy_directory_contents_into(aws_complete_exe_build, output_exe_dist_dir)
     copy_directory_contents_into(ASSETS_DIR, exe_dir)
     remove_dist_info(workdir)
-    #save_to_zip(workdir, exe_zipfile)
-    zip_preserve_symlinks(workdir, exe_zipfile)
+    save_to_zip(workdir, exe_zipfile)
 
 
 def delete_existing_exe_build():
@@ -69,23 +69,12 @@ def pyinstaller(specfile):
 
 def copy_directory(src, dst):
     print('Copying %s -> %s' % (src, dst))
-    shutil.copytree(src, dst, symlinks=True)
+    shutil.copytree(src, dst)
 
 
 def copy_directory_contents_into(src, dst):
     print('Copying contents of %s into %s' % (src, dst))
-    os.makedirs(dst, exist_ok=True)
-    for item in os.listdir(src):
-        src_item = os.path.join(src, item)
-        dst_item = os.path.join(dst, item)
-
-        if os.path.isdir(src_item):
-            copy_directory_contents_into(src_item, dst_item)
-        elif not src_item.endswith('/Python'):  # TODO - improve avoiding this conflict
-            print(fr'Copying {src_item} to {dst_item}')
-            shutil.copy2(src_item, dst_item, follow_symlinks=False)
-        else:
-            print(fr'Skipping {src_item}')
+    copy_tree(src, dst)
 
 
 def copy_file(src, dst):
