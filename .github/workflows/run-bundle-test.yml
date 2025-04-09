@@ -21,5 +21,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: python scripts/ci/install
+    - name: Install build
+      run: pip install build
     - name: Test the bundle
       run: python scripts/ci/test-bundle
