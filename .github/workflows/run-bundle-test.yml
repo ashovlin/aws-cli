@@ -1,4 +1,4 @@
-name: Run bundle test
+name: Test installing the bundle
 
 on:
   push:
@@ -6,8 +6,7 @@ on:
     branches-ignore: [ master ]
 
 jobs:
-  build:
-
+  test-bundle:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -20,6 +19,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: python scripts/ci/install
     - name: Test the bundle
-      run: |
-        python scripts/ci/test-bundle
+      run: python scripts/ci/test-bundle
