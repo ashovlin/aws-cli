@@ -39,7 +39,7 @@ def run_make_bundle():
 
 
 def install_from_bundle(zip_path):
-    print(f"Installing from bundle at {zip_path}...")
+    print(f"Installing from bundle at {zip_path}")
     run(f'unzip -o {bundle_path}')
     cmd = f'sudo {bundle_path[:-4]}/install -i /usr/local/aws -b /usr/local/bin/aws'
     print(cmd)
