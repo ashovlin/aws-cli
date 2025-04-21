@@ -22,6 +22,6 @@ jobs:
     - name: Install dependencies
       run: python scripts/ci/install
     - name: Install additional dependencies
-      run: pip install virtualenv==16.3.0 setuptools-scm hatchling hatch-vcs
+      run: pip install virtualenv==16.3.0 setuptools-scm==3.3.3  # same as internal generate-bundle.ts
     - name: Test the bundle
       run: python scripts/ci/test-bundle
