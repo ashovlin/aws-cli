@@ -22,6 +22,6 @@ jobs:
     - name: Install dependencies
       run: python scripts/ci/install
     - name: Install additional dependencies
-      run: pip install build hatchling
+      run: pip install build hatchling setuptools
     - name: Test the bundle
       run: python scripts/ci/test-bundle
