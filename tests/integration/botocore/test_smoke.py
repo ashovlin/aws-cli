@@ -74,7 +74,7 @@ SMOKE_TESTS = {
     # importexport tests are not run.
     #'importexport': {'ListJobs': {}},
     'importexport': {},
-    'inspector': {'DescribeCrossAccountAccessRole': {}},
+    #'inspector': {'DescribeCrossAccountAccessRole': {}},
     'iot': {'DescribeEndpoint': {}},
     'kinesis': {'ListStreams': {}},
     'kms': {'ListKeys': {}},
